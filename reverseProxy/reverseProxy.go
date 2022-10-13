@@ -26,7 +26,7 @@ func ProxyRequestHandler(proxy *httputil.ReverseProxy) func(http.ResponseWriter,
  
 func main() {
     // initialize a reverse proxy and pass the actual backend server url here
-    proxy, err := NewProxy("http://my-api-server.com")
+    proxy, err := NewProxy("http://localhost:1234")
     if err != nil {
         panic(err)
     }
