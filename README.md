@@ -1,6 +1,6 @@
 # go-proxy
 
-Learning about proxies.
+## Learning about proxies.
 
 A forward proxy sits in front of clients and masks them.
 Users -> proxy -> internet -> server
@@ -29,7 +29,7 @@ packets.
 TCP/IP uses a threeway handshake to establish a connection between a device and a server which 
 ensures TCP socket connections can be transferred in both directions concurrently.
 
-Headers
+## Headers
 
 X-Forwarded-For (XFF) http request header is a standard header for identifying the originating 
 IP address of a client connecting to a webserver through a proxy server.
@@ -47,3 +47,25 @@ that the client request originated from. User agent is software that acts on beh
 TE header is a request header that specifies the transfer encodings that the user agent is 
 willing to accept. If it's set to trailers, the response header can include additional 
 fields at the end of chunked messages.
+
+## HTTP
+
+http hijack allows takeover of a http.ResponseWriter. After calling hijack the http server library
+will not do anything else with the connection. It becomes the hijack caller's responsibility to 
+manage and close the connection. One use case for doing this inside a reverse proxy is when the 
+response is status 101 (switching protocols). Hijacking can be used to implement another protocol
+such as websockets.
+
+## Performance analysis
+
+To see pprof information, as this is a webserver so can just add this import.
+
+`import _ "net/http/pprof"`
+
+Then build/run the server.
+
+If it's running locally on 8080, navigate to
+`http://localhost:8080/debug/pprof/`
+
+To check escape analysis
+`go build -gcflags=-m=2`

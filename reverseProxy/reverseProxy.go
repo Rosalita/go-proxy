@@ -8,7 +8,6 @@ import (
 	"net/url"
 )
 
-
 func main() {
 	url, err := url.Parse("http://localhost:1234")
 	if err != nil {
@@ -17,14 +16,14 @@ func main() {
 
 	proxy := httputil.NewSingleHostReverseProxy(url)
 
-	http.Handle("/proxy", &ProxyHandler{proxy})
+	http.Handle("/proxy", &ProxyHandler{proxy: proxy})
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 type ProxyHandler struct {
-	p *httputil.ReverseProxy
+	proxy *httputil.ReverseProxy
 }
 
 func (ph *ProxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	ph.p.ServeHTTP(w, r)
+	ph.proxy.ServeHTTP(w, r)
 }
